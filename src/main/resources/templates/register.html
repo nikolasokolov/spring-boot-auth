@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Register</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css"/>
+</head>
+<body>
+
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Spring Boot Starter Authentication</a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li class="active"><a href="/register">Register</a></li>
+                <li><a href="/login">Login</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 col-sm-offset-3" style="border: 2px solid rgba(125,125,125,0.5); padding: 20px; margin-top: 90px; border-radius: 5px;">
+            <h3 class="text-center">Register</h3>
+            <hr/>
+            <form th:action="@{/register}" th:object="${user}" method="post">
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input type="text" required th:field="*{username}" class="form-control" id="username" placeholder="Enter username" name="username"/>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" required minlength="6" th:field="*{password}" class="form-control" id="password" placeholder="Enter password" name="password"/>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="text" required th:field="*{email}" class="form-control" id="email" placeholder="Enter email" name="email"/>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-success">Register</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</body>
+</html>
