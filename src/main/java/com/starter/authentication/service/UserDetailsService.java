@@ -25,7 +25,7 @@ public class UserDetailsService implements org.springframework.security.core.use
             throw new UsernameNotFoundException("Username " + s + " was not found");
         }
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-        grantedAuthorities.add(new SimpleGrantedAuthority(Roles.valueOf("SITE_USER").toString()));
+        grantedAuthorities.add(new SimpleGrantedAuthority(Roles.SITE_USER.toString()));
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), grantedAuthorities);
     }
 }

@@ -6,31 +6,16 @@
 </head>
 <body>
 
-<nav class="navbar navbar-inverse">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">Spring Boot Starter Authentication</a>
-        </div>
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav navbar-right">
-                <li class="active"><a href="/register">Register</a></li>
-                <li><a href="/login">Login</a></li>
-            </ul>
-        </div>
-    </div>
-</nav>
+<div th:insert="fragments/header.html :: header"></div>
 
 <div class="container">
     <div class="row">
         <div class="col-sm-6 col-sm-offset-3" style="border: 2px solid rgba(125,125,125,0.5); padding: 20px; margin-top: 90px; border-radius: 5px;">
             <h3 class="text-center">Register</h3>
             <hr/>
+            <h4 class="text-center text-danger" th:if="${usernameTaken != null}" th:text="${usernameTaken}"></h4>
+            <h4 class="text-center text-danger" th:if="${emailTaken != null}" th:text="${emailTaken}"></h4>
+            <h4 class="text-center text-danger" th:if="${wrongPassword != null}" th:text="${wrongPassword}"></h4>
             <form th:action="@{/register}" th:object="${user}" method="post">
                 <div class="form-group">
                     <label for="username">Username:</label>
@@ -39,6 +24,10 @@
                 <div class="form-group">
                     <label for="password">Password:</label>
                     <input type="password" required minlength="6" th:field="*{password}" class="form-control" id="password" placeholder="Enter password" name="password"/>
+                </div>
+                <div class="form-group">
+                    <label for="password">Confirm Password:</label>
+                    <input type="password" required minlength="6" class="form-control" id="confirmPassword" placeholder="Confirm password" name="confirmPassword"/>
                 </div>
                 <div class="form-group">
                     <label for="email">Email:</label>

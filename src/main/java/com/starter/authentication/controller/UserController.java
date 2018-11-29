@@ -1,5 +1,7 @@
 package com.starter.authentication.controller;
 
+import com.starter.authentication.exception.EmailTakenException;
+import com.starter.authentication.exception.UsernameTakenException;
 import com.starter.authentication.model.User;
 import com.starter.authentication.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,11 +10,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 @Controller
 public class UserController {
@@ -31,9 +36,24 @@ public class UserController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public String submitCreateNewUserForm(User user) {
-        userService.save(user);
-        return "redirect:/";
+    public String submitCreateNewUserForm(@Valid User user, BindingResult bindingResult, Model model, @RequestParam(value = "confirmPassword") String confirmPassword) {
+        if (!user.getPassword().equals(confirmPassword)) {
+            model.addAttribute("wrongPassword", "Passwords doesn't match.");
+            return "register";
+        }
+        if (bindingResult.hasErrors()) {
+            return "register";
+        }
+        try {
+            userService.save(user);
+        } catch (UsernameTakenException e) {
+            model.addAttribute("usernameTaken", "Username " + user.getUsername() + " is already taken");
+            return "register";
+        } catch (EmailTakenException e) {
+            model.addAttribute("emailTaken", "Email " + user.getEmail() + " is already taken");
+            return "register";
+        }
+        return "redirect:/login";
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)

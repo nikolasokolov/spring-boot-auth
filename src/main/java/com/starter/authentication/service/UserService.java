@@ -1,5 +1,8 @@
 package com.starter.authentication.service;
 
+import com.starter.authentication.exception.EmailTakenException;
+import com.starter.authentication.exception.UsernameTakenException;
+import com.starter.authentication.model.Roles;
 import com.starter.authentication.model.User;
 import com.starter.authentication.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,12 +16,16 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username);
-    }
-
-    public void save(User user) {
+    public User save(User user) throws UsernameTakenException, EmailTakenException {
+        if (userRepository.findByUsername(user.getUsername()) != null) {
+            throw new UsernameTakenException("Username " + user.getUsername() + " is already taken");
+        }
+        if (userRepository.findByEmail(user.getEmail()) != null) {
+            throw new EmailTakenException("Email " + user.getEmail() + " is already taken");
+        }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRoles(Roles.SITE_USER);
         userRepository.save(user);
+        return user;
     }
 }
